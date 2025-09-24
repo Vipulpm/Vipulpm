@@ -21,47 +21,61 @@ body {
     position: relative;
 }
 
+/* --- NAV / HEADER --- */
 nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 30px 8%;
-    position: relative;
-    z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 8%;
+  position: relative;
+  z-index: 20;
 }
 
 .logo {
-    color: #ffffff;
-    font-size: 35px;
-    letter-spacing: 1px;
-    cursor: pointer;
+  color: #ffffff;
+  font-size: 35px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
-.logo span {
-    color: #3385ff; /* accent pink */
+.logo span { color: #3385ff; }
+
+/* Hide the default checkbox */
+#menu-toggle { position: absolute; opacity: 0; pointer-events: none; }
+
+/* Hamburger icon */
+.menu-icon {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.menu-icon span {
+  height: 3px;
+  width: 26px;
+  background: #ffffff; /* visible on dark bg */
+  transition: transform .3s ease, opacity .2s ease, width .3s ease;
 }
 
+/* Desktop menu */
 nav ul {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
+  gap: 20px;
 }
-
-nav ul li {
-    margin-left: 20px;
-}
-
 nav ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: bold;
-    text-transform: capitalize;
-    transition: 0.4s;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: color .25s ease;
 }
-
-nav ul li a:hover {
-    color: #3385ff;
-}
-
+nav ul li a:hover,
+nav ul li a:focus-visible { color: #3385ff; outline: none; }
 .content {
     position: absolute;
     top: 50%;
@@ -300,31 +314,86 @@ footer .end {
     font-size: 14px;
 }
 
-/* Responsive */
+/* --- RESPONSIVE --- */
 @media (max-width: 1200px) {
-    .main {
-        flex-direction: column;
-        align-items: center;
-    }
-    .content h1 {
-        font-size: 55px;
-    }
-    .content h3 {
-        font-size: 22px;
-    }
-    .about-text h2 {
-        font-size: 45px;
-    }
-    .title h2 {
-        font-size: 45px;
-    }
+  .content h1 { font-size: 55px; }
+  .content h3 { font-size: 22px; }
+  .about-text h2, .title h2 { font-size: 45px; }
 }
+
 @media (max-width: 768px) {
-    .hero {
-        text-align: center;
-    }
-    .content {
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+  /* Center hero text on mobile (optional) */
+  .hero { text-align: center; }
+  .content {
+    /* remove the horizontal offset that breaks layout */
+    left: auto;                 /* or 0 */
+    transform: none;
+    margin: 0 auto;             /* keeps it centered */
+  }
+.content h1 {
+    font-size: 40px;       /* was 75px; adjust as you like */
+  }
+  .content h3 {
+    font-size: 18px;       /* was 25px */
+  }
+  .content h4 {
+    font-size: 16px;       /* was 20px */
+  }
+  .about-text h2{
+	font-size: 40px;
+  }
+  .menu-icon { display: flex; }
+
+  /* Mobile menu panel (dark theme) */
+  nav ul {
+    position: absolute;
+    top: 70px;
+    right: 2%;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(51,133,255,0.25);
+    border-radius: 14px;
+    width: min(200px, 80vw);
+    padding: 10px 0;
+    flex-direction: column;
+    align-items: stretch;
+    display: none; /* hidden by default */
+    box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  }
+
+  nav ul li { margin: 0; }
+  nav ul li a {
+    display: block;
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+  nav ul li a:hover,
+  nav ul li a:focus-visible {
+    background: rgba(51,133,255,0.12);
+    color: #fff;
+  }
+
+  /* Show menu when checkbox is checked */
+  #menu-toggle:checked + .menu-icon + ul { display: flex; }
+
+  /* Hamburger -> X animation */
+  #menu-toggle:checked + .menu-icon span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  #menu-toggle:checked + .menu-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  #menu-toggle:checked + .menu-icon span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+}
+
+/* --- SMALL UX/A11Y IMPROVEMENTS --- */
+.menu-icon:focus-visible { outline: 2px solid #3385ff; outline-offset: 2px; }
+nav ul li a:focus-visible { outline: 2px solid #3385ff; outline-offset: 2px; }
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .menu-icon span { transition: none; }
+  nav ul li a { transition: none; }
 }
